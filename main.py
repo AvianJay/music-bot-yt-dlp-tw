@@ -15,7 +15,8 @@ else:
         "token": "YOUR_TOKEN_HERE",
         "ownerid": 0,
         "prefix": "!",
-        "leave_time": 120
+        "leave_time": 120,
+        "status_text": "/ or !help",
     }
     open("config.json", "w").write(json.dumps(config))
     print("Please edit config.json and restart the bot!")
@@ -37,8 +38,9 @@ executor = ThreadPoolExecutor(max_workers=4)  # 執行緒池
 @bot.event
 async def on_ready():
     print(f'Logged in as {bot.user.name}')
-    print("Changing rich presence...")
-    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=config["prefix"] + "help"))
+    if config["status_text"]:
+        print("Changing rich presence...")
+        await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=config["status_text"])
     print("Syncing slash commands...")
     await bot.tree.sync()
     print("All ready!")
@@ -194,7 +196,7 @@ async def play(ctx, *, search_query):
 
 @bot.tree.command(name="play", description="播放音樂 (搜尋影片或提供連結)")
 @app_commands.describe(search_query="歌曲名稱或 YouTube 連結")
-async def play(interaction: discord.Interaction, search_query: str):
+async def play_slash(interaction: discord.Interaction, search_query: str):
     await interaction.response.defer()
     guild_id = interaction.guild.id
     voice_client = await join_slash(interaction)
@@ -279,7 +281,7 @@ async def skip(ctx):
         voice_client.stop()
 
 @bot.tree.command(name="skip", description="跳過目前正在播放的歌曲")
-async def skip(interaction: discord.Interaction):
+async def skip_slash(interaction: discord.Interaction):
     voice_client = await join_slash(interaction)
     if voice_client and voice_client.is_playing():
         voice_client.stop()
@@ -300,7 +302,7 @@ async def stop(ctx):
         voice_client.stop()
 
 @bot.tree.command(name="stop", description="停止播放並清空播放清單")
-async def stop(interaction: discord.Interaction):
+async def stop_slash(interaction: discord.Interaction):
     guild_id = interaction.guild.id
     guild_data[guild_id]["doom"] = True
     guild_data[guild_id]["queue"].clear()
@@ -329,7 +331,7 @@ async def leave(ctx):
         await ctx.send(embed=discord.Embed(title='錯誤', description='機器人未在語音頻道中', colour=discord.Colour.brand_red()))
 
 @bot.tree.command(name="leave", description="讓機器人離開語音頻道")
-async def leave(interaction: discord.Interaction):
+async def leave_slash(interaction: discord.Interaction):
     guild_id = interaction.guild.id
     voice_client = discord.utils.get(bot.voice_clients, guild=interaction.guild)
 
@@ -371,7 +373,7 @@ bot.help_command = MyHelp()
 
 @bot.tree.command(name="help", description="查看所有指令或特定指令的使用說明")
 @app_commands.describe(command_name="（可選）要查看說明的指令名稱")
-async def help(interaction: discord.Interaction, command_name: str = None):
+async def help_slash(interaction: discord.Interaction, command_name: str = None):
     if command_name:
         # 查詢特定指令
         command = bot.tree.get_command(command_name)

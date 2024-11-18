@@ -1,7 +1,17 @@
-It's very basic, and I don't plan on making it more complex, but it still needs some improvements regarding the queue. More testing is needed, but it works.
+# Discord 音樂機器人
+## 基於yt-dlp
+對原本的儲存庫新增了幾個功能：
+* 繁體中文化
+* 可在多個伺服器使用
+* 可使用斜線命令
+* 單獨分出config.json
+* 離開頻道指令
+目前還有很多不穩定的地方！如果可以請到[issues](https://github.com/AvianJay/music-bot-yt-dlp-tw/issues)新建問題！
+# 原文
+這是非常基本的，我不打算讓它變得更複雜，但它仍然需要對隊列進行一些改進。 需要更多測試，但它確實有效。
 
-Here's how it works:
+ 它的工作原理如下：
 
-It's very basic, but the more complicated part was making yt-dlp not break, since it isn't asynchronous. I made it run in threads using concurrent.futures, so if you send a really big playlist (100 songs, for example), you won't need to wait until yt-dlp fetches all the videos in the playlist before you can use the !play command again. The issue is that you'll need to wait until all the videos are fetched for them to be placed in the queue. So, if you use !play when there is already a playlist being searched, if it is a single video or a small playlist, it will be sent to the queue before the big playlist is fetched. I didn't implement any ways for the task to stop while they are still being executed because I don't really need it (lol) and because it works for me the way it is.
+ 這是非常基本的，但更複雜的部分是使 yt-dlp 不會中斷，因為它不是非同步的。 我使用並發.futures 使其在線程中運行，因此，如果您發送一個非常大的播放列表（例如 100 首歌曲），則無需等到 yt-dlp 獲取播放列表中的所有視頻，然後才能使用!再次播放命令。 問題是您需要等到所有影片都被獲取後才能將其放入隊列中。 因此，如果在已經存在正在搜尋的播放列表時使用 !play，如果它是單個視頻或小播放列表，它將在獲取大播放列表之前發送到隊列。 我沒有實現任何方法讓任務在仍在執行時停止，因為我真的不需要它（笑），而且它對我來說是這樣的。
 
-queue, actual_url, and thumb_url are used to store information about the video to send in the embed message when a song is currently playing. bot.playstatus is used to check if the bot is still in "play" mode, so the next song in the queue is played after the currently playing song ends. bot.doom is to make sure the bot stops after using !stop if there is a video or playlist being searched in the background. That's pretty much it.
+ queue、actual_url 和thumb_url 用於儲存當前播放歌曲時要在嵌入訊息中發送的視訊訊息。  bot.playstatus 用於檢查機器人是否仍處於「播放」模式，因此目前播放的歌曲結束後會播放佇列中的下一首歌曲。  bot.doom 是為了確保當後台正在搜尋影片或播放清單時，機器人在使用 !stop 後停止。 差不多就這樣了。
