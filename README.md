@@ -1,11 +1,11 @@
 # Discord 音樂機器人
-## 基於yt-dlp
+### 基於yt-dlp，原儲存庫：[SpaceCowboyZZ/music-bot-yt-dlp](https://github.com/SpaceCowboyZZ/music-bot-yt-dlp)
 對原本的儲存庫新增了幾個功能：
 * 繁體中文化
 * 可在多個伺服器使用
 * 可使用斜線命令
 * 單獨分出config.json
-* 離開頻道指令
+* 離開頻道指令<br>
 目前還有很多不穩定的地方！如果可以請到[issues](https://github.com/AvianJay/music-bot-yt-dlp-tw/issues)新建問題！
 # 原文
 這是非常基本的，我不打算讓它變得更複雜，但它仍然需要對隊列進行一些改進。 需要更多測試，但它確實有效。
